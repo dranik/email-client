@@ -12,6 +12,32 @@
         :hide-default-footer="true"
         @click:row="handleRowClick"
       ></v-data-table>
+      <div class="home__controls">
+        <v-btn
+          v-if="page > 1"
+          @click="previousPage"
+          color="primary"
+          text
+        >
+          <v-icon>mdi-arrow-left</v-icon>
+          <span class="mr-2">Previous</span>
+        </v-btn>
+        <v-btn
+          @click="reload"
+          color="primary"
+          text
+        >
+          <span class="mr-2">Reload</span>
+        </v-btn>
+        <v-btn
+          @click="nextPage"
+          color="primary"
+          text
+        >
+          <span class="mr-2">Next</span>
+          <v-icon>mdi-arrow-right</v-icon>
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -32,10 +58,21 @@ export default {
       ]
     }
   },
-  computed: mapState(['loadingEmails', 'emails', 'credentials']),
+  computed: mapState(['loadingEmails', 'emails', 'credentials', 'page']),
   methods: {
     handleRowClick({uid}) {
       this.$router.push({ name: 'Show', params: { uid } });
+    },
+    reload() {
+      this.$store.dispatch('getEmails');
+    },
+    previousPage() {
+      this.$store.dispatch('previousPage');
+      this.$store.dispatch('getEmails');
+    },
+    nextPage() {
+      this.$store.dispatch('nextPage');
+      this.$store.dispatch('getEmails');
     }
   },
   mounted() {
@@ -43,3 +80,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.home__controls {
+  text-align: center;
+}
+</style>

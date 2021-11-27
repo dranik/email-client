@@ -7,7 +7,7 @@ class EmailsController < ApplicationController
     imap = Net::IMAP.new(credential_session.imap_host, credential_session.imap_port, true)
     imap.login(credential_session.username, credential_session.password)
     imap.examine('INBOX')
-    emails = imap.uid_search(["ALL"]).last(10)
+    emails = imap.uid_search(["ALL"]).each_slice(10).to_a[params[:page].to_i - 1]
       .map do |uid|
         email = Mail.new(imap.uid_fetch(uid, "RFC822").first.attr["RFC822"])
         { subject: email.subject, date: email.date, from: email.from, uid: uid }

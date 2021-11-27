@@ -11,7 +11,8 @@ export default new Vuex.Store({
     emailsListOffset: 0,
     email: [],
     credentials: null,
-    error: null
+    error: null,
+    page: 1,
   },
   mutations: {
     startEmailsLoading(state) {
@@ -40,14 +41,17 @@ export default new Vuex.Store({
     },
     setError(state, value) {
       state.error = value;
-    }
+    },
+    shiftPage(state, value) {
+      state.page = state.page + value;
+    },
   },
   actions: {
-    async getEmails({ commit, state: { credentials } }) {
+    async getEmails({ commit, state: { credentials, page } }) {
       commit('unsetError');
       commit('setEmails', []);
       commit('startEmailsLoading');
-      const req = await fetch(`   http://localhost:3000/emails?credential_session_id=${credentials}`);
+      const req = await fetch(`   http://localhost:3000/emails?credential_session_id=${credentials}&page=${page}`);
       const emails = await req.json();
       if (req.status === 200) {
         commit('setEmails', emails);
@@ -119,7 +123,13 @@ export default new Vuex.Store({
     },
     removeCredentials({ commit }) {
       commit('setCredentials', null);
-    }
+    },
+    previousPage({ commit }) {
+      commit('shiftPage', -1);
+    },
+    nextPage({ commit }) {
+      commit('shiftPage', 1);
+    },
   },
   modules: {
   }
