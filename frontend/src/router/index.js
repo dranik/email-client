@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Compose from '../views/Compose.vue'
 import Show from '../views/Show.vue'
+import Credentials from '../views/Credentials'
 
 Vue.use(VueRouter)
 
@@ -18,9 +19,14 @@ const routes = [
     component: Compose
   },
   {
-    path: '/show/:id',
+    path: '/show/:uid',
     name: 'Show',
     component: Show
+  },
+  {
+    path: '/credentials',
+    name: 'Credentials',
+    component: Credentials
   }
 ]
 
