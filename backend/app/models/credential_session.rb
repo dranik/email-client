@@ -8,4 +8,5 @@ class CredentialSession < ApplicationRecord
             :from_email,
             :password,
             presence: true
+    scope :created_after, ->(time) { where('created_at > ?', time) }
 end
